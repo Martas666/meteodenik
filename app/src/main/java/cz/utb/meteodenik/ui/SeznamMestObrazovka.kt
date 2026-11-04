@@ -1,8 +1,10 @@
 package cz.utb.meteodenik.ui
 
 import android.content.Intent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -14,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import cz.utb.meteodenik.DetailMestaActivity
 import cz.utb.meteodenik.R
 import cz.utb.meteodenik.ZaznamUlozenReceiver
+import cz.utb.meteodenik.model.UKAZKOVA_MESTA
 
 @Composable
 fun SeznamMestObrazovka(modifier: Modifier = Modifier) {
@@ -26,24 +29,38 @@ fun SeznamMestObrazovka(modifier: Modifier = Modifier) {
     ) {
         Text(text = stringResource(R.string.seznam_mest))
 
-        Text(text = "Zlín")
+        UKAZKOVA_MESTA.forEach { mesto ->
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        val intent = Intent(
+                            context,
+                            DetailMestaActivity::class.java
+                        ).apply {
+                            putExtra(
+                                DetailMestaActivity.EXTRA_MESTO,
+                                mesto.nazev
+                            )
+                            putExtra(
+                                DetailMestaActivity.EXTRA_TEPLOTA,
+                                mesto.teplota
+                            )
+                        }
 
-        Text(text = stringResource(R.string.teplota_format, 21.4))
+                        context.startActivity(intent)
+                    }
+                    .padding(16.dp)
+            ) {
+                Text(text = mesto.nazev)
 
-        Button(
-            onClick = {
-                val intent = Intent(
-                    context,
-                    DetailMestaActivity::class.java
-                ).apply {
-                    putExtra(DetailMestaActivity.EXTRA_MESTO, "Zlín")
-                    putExtra(DetailMestaActivity.EXTRA_TEPLOTA, 21.4)
-                }
-
-                context.startActivity(intent)
+                Text(
+                    text = stringResource(
+                        R.string.teplota_format,
+                        mesto.teplota
+                    )
+                )
             }
-        ) {
-            Text(text = stringResource(R.string.otevri_detail))
         }
 
         Button(
@@ -52,7 +69,10 @@ fun SeznamMestObrazovka(modifier: Modifier = Modifier) {
                     ZaznamUlozenReceiver.ACTION_ZAZNAM_ULOZEN
                 ).apply {
                     setPackage(context.packageName)
-                    putExtra(ZaznamUlozenReceiver.EXTRA_MESTO, "Zlín")
+                    putExtra(
+                        ZaznamUlozenReceiver.EXTRA_MESTO,
+                        UKAZKOVA_MESTA.first().nazev
+                    )
                 }
 
                 context.sendBroadcast(intent)

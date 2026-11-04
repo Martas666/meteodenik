@@ -1,4 +1,3 @@
-
 package cz.utb.meteodenik.ui
 
 import android.content.ActivityNotFoundException

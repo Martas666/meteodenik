@@ -15,11 +15,13 @@
 
     <!-- Oprávnění k poloze -->
     <string name="poloha_zjistit">Zjistit moji polohu</string>
-    <string name="poloha_vysvetleni">Přibližnou polohu potřebujeme, abychom vám mohli nabídnout počasí ve městě, kde právě jste.</string>
-    <string name="poloha_pokracovat">Rozumím, pokračovat</string>
+    <string name="poloha_vysvetleni">Přibližnou polohu použijeme k zobrazení vašich souřadnic a později k nabídce počasí ve vašem okolí. Město si můžete vždy vybrat i ručně.</string>    <string name="poloha_pokracovat">Rozumím, pokračovat</string>
     <string name="poloha_povolena">Poloha je povolena</string>
     <string name="poloha_bez_opravneni">Bez povolení polohy můžete dál vybírat město ručně. Polohu můžete povolit v nastavení aplikace.</string>
     <string name="otevrit_nastaveni">Otevřít nastavení</string>
+    <string name="poloha_odmitnuta">Poloha zatím nebyla povolena. Můžete to zkusit znovu.</string>
+    <string name="poloha_souradnice">Zeměpisná šířka: %1$.5f\nZeměpisná délka: %2$.5f</string>
+    <string name="poloha_nedostupna">Poloha je povolena, ale zařízení zatím nemá dostupné souřadnice.</string>
 
     <string name="seznam_titulek_pocet">Moje města — %1$s</string>
     <plurals name="pocet_zaznamu">
@@ -29,7 +31,5 @@
         <item quantity="other">%1$d záznamů</item>
     </plurals>
     <string name="detail_souhrn">%1$s má právě %2$.1f °C</string>
-
-
 
 </resources>

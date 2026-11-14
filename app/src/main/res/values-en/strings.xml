@@ -27,11 +27,15 @@
 
     <!-- Location -->
     <string name="poloha_zjistit">Find my location</string>
-    <string name="poloha_vysvetleni">We need your approximate location to offer weather for the city where you are.</string>
+    <string name="poloha_vysvetleni">We use your approximate location to display your coordinates and later offer weather for your area. You can always choose a city manually.</string>
     <string name="poloha_pokracovat">Continue</string>
     <string name="poloha_povolena">Location permission granted</string>
     <string name="poloha_bez_opravneni">You can still choose a city manually. To use your location, enable the permission in app settings.</string>
     <string name="otevrit_nastaveni">Open settings</string>
+    <string name="poloha_odmitnuta">Location permission was denied. You can try again.</string>
+    <string name="poloha_souradnice">Latitude: %1$.5f\nLongitude: %2$.5f</string>
+    <string name="poloha_nedostupna">Location permission is granted, but coordinates are not currently available.</string>
+
     <!-- Record count -->
     <plurals name="pocet_zaznamu">
         <item quantity="one">%1$d record</item>

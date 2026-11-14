@@ -12,4 +12,22 @@
     <string name="seznam_mest">Seznam měst</string>
     <string name="otevri_detail">Otevřít detail města</string>
     <string name="mesto_nezname">Neznámé město</string>
+
+    <!-- Oprávnění k poloze -->
+    <string name="poloha_zjistit">Zjistit moji polohu</string>
+    <string name="poloha_vysvetleni">Přibližnou polohu potřebujeme, abychom vám mohli nabídnout počasí ve městě, kde právě jste.</string>
+    <string name="poloha_pokracovat">Rozumím, pokračovat</string>
+    <string name="poloha_povolena">Poloha je povolena</string>
+    <string name="poloha_bez_opravneni">Bez povolení polohy můžete dál vybírat město ručně. Polohu můžete povolit v nastavení aplikace.</string>
+    <string name="otevrit_nastaveni">Otevřít nastavení</string>
+
+    <string name="seznam_titulek_pocet">Moje města — %1$s</string>
+    <plurals name="pocet_zaznamu">
+        <item quantity="one">%1$d záznam</item>
+        <item quantity="few">%1$d záznamy</item>
+        <item quantity="many">%1$d záznamu</item>
+        <item quantity="other">%1$d záznamů</item>
+    </plurals>
+
+
 </resources>

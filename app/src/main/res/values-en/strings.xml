@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Weather Diary</string>
+
+    <!-- Texts from the earlier version -->
+    <string name="uvodni_text">Welcome to Weather Diary</string>
+    <string name="text_po_kliknuti">Record updated</string>
+    <string name="akce_zmen_text">Change text</string>
+
+    <!-- City list -->
+    <string name="seznam_mest">City list</string>
+    <string name="seznam_titulek_pocet">My cities — %1$s</string>
+    <string name="otevri_detail">Open city details</string>
+    <string name="mesto_nezname">Unknown city</string>
+
+    <!-- Temperature -->
+    <string name="teplota_format">%1$.1f °C</string>
+    <string name="teplota_chybi">Temperature unavailable</string>
+
+    <!-- Sharing and records -->
+    <string name="sdilet_zaznam">Share record</string>
+    <string name="sdileny_text">%1$s: %2$.1f °C — recorded in Weather Diary</string>
+    <string name="poslat_zpravu">Add record</string>
+
+    <!-- Location -->
+    <string name="poloha_zjistit">Find my location</string>
+
+    <string name="poloha_vysvetleni">We need your approximate location to offer weather for the city where you are.</string>
+
+    <string name="poloha_pokracovat">Continue</string>
+    <string name="poloha_povolena">Location permission granted</string>
+
+    <string name="poloha_bez_opravneni">You can still choose a city manually. To use your location, enable the permission in app settings.</string>
+
+    <string name="otevrit_nastaveni">Open settings</string>
+
+    <!-- Record count -->
+    <plurals name="pocet_zaznamu">
+        <item quantity="one">%1$d record</item>
+        <item quantity="other">%1$d records</item>
+    </plurals>
+
+</resources>

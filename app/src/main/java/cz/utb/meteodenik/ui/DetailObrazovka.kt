@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -25,17 +26,27 @@ fun DetailObrazovka(
 ) {
     Column(
         modifier = modifier.padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Text(text = mesto)
+        if (teplota.isNaN()) {
+            Text(
+                text = mesto,
+                style = MaterialTheme.typography.headlineSmall
+            )
 
-        Text(
-            text = if (teplota.isNaN()) {
-                stringResource(R.string.teplota_chybi)
-            } else {
-                stringResource(R.string.teplota_format, teplota)
-            }
-        )
+            Text(
+                text = stringResource(R.string.teplota_chybi)
+            )
+        } else {
+            Text(
+                text = stringResource(
+                    R.string.detail_souhrn,
+                    mesto,
+                    teplota
+                ),
+                style = MaterialTheme.typography.headlineSmall
+            )
+        }
 
         SdiletTlacitko(
             mesto = mesto,
@@ -45,9 +56,17 @@ fun DetailObrazovka(
 }
 
 @Composable
-fun SdiletTlacitko(mesto: String, teplota: Double) {
+fun SdiletTlacitko(
+    mesto: String,
+    teplota: Double
+) {
     val context = LocalContext.current
-    val text = stringResource(R.string.sdileny_text, mesto, teplota)
+
+    val text = stringResource(
+        R.string.sdileny_text,
+        mesto,
+        teplota
+    )
 
     Button(
         onClick = {
@@ -61,10 +80,16 @@ fun SdiletTlacitko(mesto: String, teplota: Double) {
                     Intent.createChooser(sendIntent, null)
                 )
             } catch (e: ActivityNotFoundException) {
-                Log.w(TAG, "Není dostupná aplikace pro sdílení textu", e)
+                Log.w(
+                    TAG,
+                    "Není dostupná aplikace pro sdílení",
+                    e
+                )
             }
         }
     ) {
-        Text(text = stringResource(R.string.sdilet_zaznam))
+        Text(
+            text = stringResource(R.string.sdilet_zaznam)
+        )
     }
 }

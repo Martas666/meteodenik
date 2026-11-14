@@ -23,6 +23,7 @@
     <string name="sdilet_zaznam">Share record</string>
     <string name="sdileny_text">%1$s: %2$.1f °C — recorded in Weather Diary</string>
     <string name="poslat_zpravu">Add record</string>
+    <string name="detail_souhrn">%1$s currently has %2$.1f °C</string>
 
     <!-- Location -->
     <string name="poloha_zjistit">Find my location</string>

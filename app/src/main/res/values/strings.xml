@@ -28,6 +28,8 @@
         <item quantity="many">%1$d záznamu</item>
         <item quantity="other">%1$d záznamů</item>
     </plurals>
+    <string name="detail_souhrn">%1$s má právě %2$.1f °C</string>
+
 
 
 </resources>

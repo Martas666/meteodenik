@@ -6,12 +6,8 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
-import cz.utb.meteodenik.ui.SeznamMestObrazovka
+import cz.utb.meteodenik.ui.MestaObrazovka
 import cz.utb.meteodenik.ui.theme.MeteoDenikTheme
 
 private const val TAG = "Cyklus"
@@ -19,35 +15,38 @@ private const val TAG = "Cyklus"
 class MainActivity : ComponentActivity() {
 
     private val receiver = ZaznamUlozenReceiver { mesto ->
-        Log.d(TAG, "MainActivity dostala zprávu o uložení: $mesto")
+        Log.d(
+            TAG,
+            "MainActivity dostala zprávu o uložení: $mesto"
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Log.d(TAG, "MainActivity onCreate (savedInstanceState = $savedInstanceState)")
-
+        Log.d(
+            TAG,
+            "MainActivity onCreate (savedInstanceState = $savedInstanceState)"
+        )
         enableEdgeToEdge()
-
         setContent {
             MeteoDenikTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    SeznamMestObrazovka(
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                MestaObrazovka()
             }
         }
     }
 
     override fun onStart() {
         super.onStart()
+
         Log.d(TAG, "MainActivity onStart")
 
         ContextCompat.registerReceiver(
             this,
             receiver,
-            IntentFilter(ZaznamUlozenReceiver.ACTION_ZAZNAM_ULOZEN),
+            IntentFilter(
+                ZaznamUlozenReceiver.ACTION_ZAZNAM_ULOZEN
+            ),
             ContextCompat.RECEIVER_NOT_EXPORTED
         )
     }
@@ -64,6 +63,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onStop() {
         super.onStop()
+
         Log.d(TAG, "MainActivity onStop")
 
         unregisterReceiver(receiver)
@@ -76,6 +76,10 @@ class MainActivity : ComponentActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d(TAG, "MainActivity onDestroy (isFinishing = $isFinishing)")
+
+        Log.d(
+            TAG,
+            "MainActivity onDestroy (isFinishing = $isFinishing)"
+        )
     }
 }

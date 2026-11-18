@@ -62,11 +62,18 @@ fun SdiletTlacitko(
 ) {
     val context = LocalContext.current
 
-    val text = stringResource(
-        R.string.sdileny_text,
-        mesto,
-        teplota
-    )
+    val text = if (teplota.isNaN()) {
+        stringResource(
+            R.string.sdileny_text_bez_teploty,
+            mesto
+        )
+    } else {
+        stringResource(
+            R.string.sdileny_text,
+            mesto,
+            teplota
+        )
+    }
 
     Button(
         onClick = {

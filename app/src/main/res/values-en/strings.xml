@@ -42,4 +42,18 @@
         <item quantity="other">%1$d records</item>
     </plurals>
 
+
+    <!-- Lesson 07 – city list -->
+    <string name="mesta_titulek">My cities</string>
+    <string name="mesta_prazdno">No cities yet. Add the first one.</string>
+    <string name="mesto_pole_label">City name</string>
+    <string name="mesto_pridat">Add</string>
+    <string name="mesto_teplota">%1$.1f °C</string>
+    <string name="mesto_teplota_neznama">Temperature not known yet</string>
+    <string name="mesto_avatar_popis">City badge</string>
+
+    <!-- Sharing a city without a known temperature -->
+    <string name="sdileny_text_bez_teploty">%1$s: temperature not yet known — recorded in Weather Diary</string>
+
+
 </resources>

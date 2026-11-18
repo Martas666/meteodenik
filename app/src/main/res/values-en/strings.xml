@@ -60,5 +60,16 @@
     <string name="vizitka_email_popis">Email: %1$s</string>
     <string name="vizitka_avatar_popis">Avatar of %1$s</string>
 
+    <!-- Exercise 7.2 – deleting and validating cities -->
+    <string name="mesto_duplikat">This city is already in the list.</string>
+    <string name="mesto_smazat">Delete</string>
+    <string name="mesto_smazat_popis">Delete city %1$s</string>
+
+    <plurals name="mesta_pocet">
+        <item quantity="one">%1$d city</item>
+        <item quantity="other">%1$d cities</item>
+    </plurals>
+
+
 
 </resources>

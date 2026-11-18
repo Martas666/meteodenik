@@ -1,3 +1,4 @@
+
 package cz.utb.meteodenik.ui
 
 import android.content.Intent
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,6 +27,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -50,21 +53,29 @@ import cz.utb.meteodenik.ZaznamUlozenReceiver
 import cz.utb.meteodenik.model.Mesto
 import cz.utb.meteodenik.ui.theme.MeteoDenikTheme
 
+// Ukázková města z předchozích lekcí.
 internal val ukazkovaMesta = listOf(
     Mesto(id = 1, nazev = "Zlín", teplotaC = 21.4),
     Mesto(id = 2, nazev = "Brno", teplotaC = 23.1),
     Mesto(id = 3, nazev = "Ostrava", teplotaC = 19.8)
 )
 
-// Karta jednoho města z praktického průchodu.
+// Karta města.
+// Nově přijímá také callback onSmazat.
 @Composable
 fun MestoKarta(
     mesto: Mesto,
     onOtevrit: () -> Unit,
+    onSmazat: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val popisAvatara = stringResource(
         R.string.mesto_avatar_popis
+    )
+
+    val popisSmazani = stringResource(
+        R.string.mesto_smazat_popis,
+        mesto.nazev
     )
 
     Card(
@@ -75,6 +86,7 @@ fun MestoKarta(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+
             Box(
                 modifier = Modifier
                     .size(48.dp)
@@ -95,9 +107,11 @@ fun MestoKarta(
                 )
             }
 
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(12.dp))
 
-            Column(modifier = Modifier.weight(1f)) {
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
                 Text(
                     text = mesto.nazev,
                     style = MaterialTheme.typography.titleMedium,
@@ -122,14 +136,34 @@ fun MestoKarta(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
+
+            // Nové tlačítko – cvičení 7.2.
+            // Samotná karta neřeší, jak se město smaže.
+            TextButton(
+                onClick = onSmazat,
+                modifier = Modifier
+                    .defaultMinSize(
+                        minWidth = 48.dp,
+                        minHeight = 48.dp
+                    )
+                    .semantics {
+                        contentDescription = popisSmazani
+                    }
+            ) {
+                Text(
+                    text = stringResource(R.string.mesto_smazat)
+                )
+            }
         }
     }
 }
 
-// Bezstavový formulář pro přidání města.
+// Formulář pro přidání města.
+// Stav si neukládá, pouze dostává hodnoty od rodiče.
 @Composable
 fun PridatMestoRadek(
     nazev: String,
+    jeChyba: Boolean,
     onNazevChange: (String) -> Unit,
     onPridat: () -> Unit,
     modifier: Modifier = Modifier
@@ -138,6 +172,7 @@ fun PridatMestoRadek(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
+
         OutlinedTextField(
             value = nazev,
             onValueChange = onNazevChange,
@@ -147,6 +182,18 @@ fun PridatMestoRadek(
                         R.string.mesto_pole_label
                     )
                 )
+            },
+            isError = jeChyba,
+            supportingText = if (jeChyba) {
+                {
+                    Text(
+                        text = stringResource(
+                            R.string.mesto_duplikat
+                        )
+                    )
+                }
+            } else {
+                null
             },
             singleLine = true,
             modifier = Modifier.weight(1f)
@@ -165,11 +212,13 @@ fun PridatMestoRadek(
     }
 }
 
-// Posuvný seznam karet.
+// Seznam měst.
+// Nově přijímá onSmazatMesto a předává ID vybrané karty.
 @Composable
 fun MestaSeznam(
     mesta: List<Mesto>,
     onOtevritMesto: (Mesto) -> Unit,
+    onSmazatMesto: (Int) -> Unit,
     onZapsatZaznam: () -> Unit,
     modifier: Modifier = Modifier,
     polohaObsah: @Composable () -> Unit = {}
@@ -179,7 +228,8 @@ fun MestaSeznam(
         contentPadding = PaddingValues(vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        // NOVÉ: cvičení 7.1 – vizitková karta.
+
+        // Vizitka ze cvičení 7.1.
         item(key = "vizitka") {
             VizitkaKarta(
                 jmeno = stringResource(R.string.vizitka_jmeno),
@@ -193,11 +243,11 @@ fun MestaSeznam(
             polohaObsah()
         }
 
-        // Počet měst z lekce 06.
+        // Nový plurál pro počet měst.
         item(key = "pocet") {
             Text(
                 text = pluralStringResource(
-                    R.plurals.pocet_zaznamu,
+                    R.plurals.mesta_pocet,
                     mesta.size,
                     mesta.size
                 ),
@@ -221,10 +271,14 @@ fun MestaSeznam(
             items = mesta,
             key = { mesto -> mesto.id }
         ) { mesto ->
+
             MestoKarta(
                 mesto = mesto,
                 onOtevrit = {
                     onOtevritMesto(mesto)
+                },
+                onSmazat = {
+                    onSmazatMesto(mesto.id)
                 }
             )
         }
@@ -244,15 +298,18 @@ fun MestaSeznam(
     }
 }
 
-// Obsah hlavní obrazovky bez vlastního stavu.
+// Bezstavový obsah obrazovky.
+// Všechny hodnoty a akce dostává přes parametry.
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MestaObsah(
     mesta: List<Mesto>,
     novyNazev: String,
+    jeDuplikat: Boolean,
     onNovyNazevChange: (String) -> Unit,
     onPridatMesto: () -> Unit,
     onOtevritMesto: (Mesto) -> Unit,
+    onSmazatMesto: (Int) -> Unit,
     onZapsatZaznam: () -> Unit,
     modifier: Modifier = Modifier,
     polohaObsah: @Composable () -> Unit = {}
@@ -275,14 +332,17 @@ fun MestaObsah(
             )
         }
     ) { innerPadding ->
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(horizontal = 16.dp)
         ) {
+
             PridatMestoRadek(
                 nazev = novyNazev,
+                jeChyba = jeDuplikat,
                 onNazevChange = onNovyNazevChange,
                 onPridat = onPridatMesto
             )
@@ -294,6 +354,7 @@ fun MestaObsah(
             MestaSeznam(
                 mesta = mesta,
                 onOtevritMesto = onOtevritMesto,
+                onSmazatMesto = onSmazatMesto,
                 onZapsatZaznam = onZapsatZaznam,
                 modifier = Modifier.weight(1f),
                 polohaObsah = polohaObsah
@@ -302,7 +363,6 @@ fun MestaObsah(
     }
 }
 
-// Jediné místo v souboru, které uchovává stav obrazovky.
 @Composable
 fun MestaObrazovka(modifier: Modifier = Modifier) {
 
@@ -316,33 +376,57 @@ fun MestaObrazovka(modifier: Modifier = Modifier) {
         mutableStateOf(ukazkovaMesta)
     }
 
+    // Nový stav – zda už dané město existuje.
+    var jeDuplikat by remember {
+        mutableStateOf(false)
+    }
+
     MestaObsah(
         mesta = mesta,
         novyNazev = novyNazev,
+        jeDuplikat = jeDuplikat,
 
-        onNovyNazevChange = {
-            novyNazev = it
+        // Každá změna vstupu zruší původní chybu.
+        onNovyNazevChange = { novyText ->
+            novyNazev = novyText
+            jeDuplikat = false
         },
 
+        // Přidání města a kontrola duplicit.
         onPridatMesto = {
+
             val nazev = novyNazev.trim()
 
             if (nazev.isNotEmpty()) {
-                val noveId =
-                    (mesta.maxOfOrNull { it.id } ?: 0) + 1
 
-                mesta = mesta + Mesto(
-                    id = noveId,
-                    nazev = nazev,
-                    teplotaC = null
-                )
+                val existuje = mesta.any { mesto ->
+                    mesto.nazev.trim().equals(
+                        nazev,
+                        ignoreCase = true
+                    )
+                }
 
-                novyNazev = ""
+                if (existuje) {
+                    jeDuplikat = true
+
+                } else {
+                    val noveId =
+                        (mesta.maxOfOrNull { it.id } ?: 0) + 1
+
+                    mesta = mesta + Mesto(
+                        id = noveId,
+                        nazev = nazev,
+                        teplotaC = null
+                    )
+
+                    novyNazev = ""
+                    jeDuplikat = false
+                }
             }
         },
 
-        // Explicitní Intent pro otevření detailu.
         onOtevritMesto = { mesto ->
+
             val intent = Intent(
                 context,
                 DetailMestaActivity::class.java
@@ -351,6 +435,7 @@ fun MestaObrazovka(modifier: Modifier = Modifier) {
                     DetailMestaActivity.EXTRA_MESTO,
                     mesto.nazev
                 )
+
                 putExtra(
                     DetailMestaActivity.EXTRA_TEPLOTA,
                     mesto.teplotaC ?: Double.NaN
@@ -360,15 +445,27 @@ fun MestaObrazovka(modifier: Modifier = Modifier) {
             context.startActivity(intent)
         },
 
-        // Broadcast pro oznámení o záznamu.
+        // Mazání města podle jeho ID.
+        onSmazatMesto = { id ->
+
+            mesta = mesta.filterNot { mesto ->
+                mesto.id == id
+            }
+
+            jeDuplikat = false
+        },
+
         onZapsatZaznam = {
+
             val prvniMesto = mesta.firstOrNull()
 
             if (prvniMesto != null) {
+
                 val intent = Intent(
                     ZaznamUlozenReceiver.ACTION_ZAZNAM_ULOZEN
                 ).apply {
                     setPackage(context.packageName)
+
                     putExtra(
                         ZaznamUlozenReceiver.EXTRA_MESTO,
                         prvniMesto.nazev
@@ -381,14 +478,17 @@ fun MestaObrazovka(modifier: Modifier = Modifier) {
 
         modifier = modifier,
 
-        // Zcela zachovaná PolohaKarta z lekce 06.
         polohaObsah = {
             PolohaKarta(onPolohaPovolena = {})
         }
     )
 }
 
-@Preview(name = "Karta – světlá", showBackground = true)
+// Náhled karty – světlý a tmavý.
+@Preview(
+    name = "Karta – světlá",
+    showBackground = true
+)
 @Preview(
     name = "Karta – tmavá",
     showBackground = true,
@@ -400,12 +500,17 @@ private fun MestoKartaPreview() {
         MestoKarta(
             mesto = ukazkovaMesta.first(),
             onOtevrit = {},
+            onSmazat = {},
             modifier = Modifier.padding(16.dp)
         )
     }
 }
 
-@Preview(name = "Neznámá teplota", showBackground = true)
+// Náhled karty bez známé teploty.
+@Preview(
+    name = "Neznámá teplota",
+    showBackground = true
+)
 @Composable
 private fun MestoBezTeplotyPreview() {
     MeteoDenikTheme {
@@ -416,12 +521,17 @@ private fun MestoBezTeplotyPreview() {
                 teplotaC = null
             ),
             onOtevrit = {},
+            onSmazat = {},
             modifier = Modifier.padding(16.dp)
         )
     }
 }
 
-@Preview(name = "Obrazovka – světlá", showBackground = true)
+// Náhled celé obrazovky – světlý a tmavý.
+@Preview(
+    name = "Obrazovka – světlá",
+    showBackground = true
+)
 @Preview(
     name = "Obrazovka – tmavá",
     showBackground = true,
@@ -433,24 +543,53 @@ private fun MestaObsahPreview() {
         MestaObsah(
             mesta = ukazkovaMesta,
             novyNazev = "Otrokovice",
+            jeDuplikat = false,
             onNovyNazevChange = {},
             onPridatMesto = {},
             onOtevritMesto = {},
+            onSmazatMesto = {},
             onZapsatZaznam = {}
         )
     }
 }
 
-@Preview(name = "Prázdný seznam", showBackground = true)
+// Náhled prázdného seznamu.
+@Preview(
+    name = "Prázdný seznam",
+    showBackground = true
+)
 @Composable
 private fun MestaObsahPrazdnaPreview() {
     MeteoDenikTheme {
         MestaObsah(
             mesta = emptyList(),
             novyNazev = "",
+            jeDuplikat = false,
             onNovyNazevChange = {},
             onPridatMesto = {},
             onOtevritMesto = {},
+            onSmazatMesto = {},
+            onZapsatZaznam = {}
+        )
+    }
+}
+
+// NOVÉ – náhled duplicitního města.
+@Preview(
+    name = "Chyba – duplicitní město",
+    showBackground = true
+)
+@Composable
+private fun MestaObsahChybaPreview() {
+    MeteoDenikTheme {
+        MestaObsah(
+            mesta = ukazkovaMesta,
+            novyNazev = "Brno",
+            jeDuplikat = true,
+            onNovyNazevChange = {},
+            onPridatMesto = {},
+            onOtevritMesto = {},
+            onSmazatMesto = {},
             onZapsatZaznam = {}
         )
     }

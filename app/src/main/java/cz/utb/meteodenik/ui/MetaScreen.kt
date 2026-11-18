@@ -50,14 +50,13 @@ import cz.utb.meteodenik.ZaznamUlozenReceiver
 import cz.utb.meteodenik.model.Mesto
 import cz.utb.meteodenik.ui.theme.MeteoDenikTheme
 
-// Původní města z lekce 05 zůstávají zachovaná.
 internal val ukazkovaMesta = listOf(
     Mesto(id = 1, nazev = "Zlín", teplotaC = 21.4),
     Mesto(id = 2, nazev = "Brno", teplotaC = 23.1),
     Mesto(id = 3, nazev = "Ostrava", teplotaC = 19.8)
 )
 
-// Blok C – karta jednoho města.
+// Karta jednoho města z praktického průchodu.
 @Composable
 fun MestoKarta(
     mesto: Mesto,
@@ -127,7 +126,7 @@ fun MestoKarta(
     }
 }
 
-// Blok D – bezstavový řádek pro přidání města.
+// Bezstavový formulář pro přidání města.
 @Composable
 fun PridatMestoRadek(
     nazev: String,
@@ -166,7 +165,7 @@ fun PridatMestoRadek(
     }
 }
 
-// Blok E – posuvný seznam s unikátními klíči.
+// Posuvný seznam karet.
 @Composable
 fun MestaSeznam(
     mesta: List<Mesto>,
@@ -180,12 +179,21 @@ fun MestaSeznam(
         contentPadding = PaddingValues(vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        // Funkcionalita z lekce 06.
+        // NOVÉ: cvičení 7.1 – vizitková karta.
+        item(key = "vizitka") {
+            VizitkaKarta(
+                jmeno = stringResource(R.string.vizitka_jmeno),
+                obor = stringResource(R.string.vizitka_obor),
+                email = stringResource(R.string.vizitka_email)
+            )
+        }
+
+        // Poloha z lekce 06.
         item(key = "poloha") {
             polohaObsah()
         }
 
-        // Lokalizovaný počet z lekce 06.
+        // Počet měst z lekce 06.
         item(key = "pocet") {
             Text(
                 text = pluralStringResource(
@@ -221,7 +229,7 @@ fun MestaSeznam(
             )
         }
 
-        // Tlačítko pro BroadcastReceiver z lekce 05.
+        // BroadcastReceiver z lekce 05.
         item(key = "broadcast") {
             Button(
                 onClick = onZapsatZaznam,
@@ -236,7 +244,7 @@ fun MestaSeznam(
     }
 }
 
-// Blok F – bezstavový obsah obrazovky.
+// Obsah hlavní obrazovky bez vlastního stavu.
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MestaObsah(
@@ -294,7 +302,7 @@ fun MestaObsah(
     }
 }
 
-// Jediné místo v tomto souboru, které drží stav.
+// Jediné místo v souboru, které uchovává stav obrazovky.
 @Composable
 fun MestaObrazovka(modifier: Modifier = Modifier) {
 
@@ -333,7 +341,7 @@ fun MestaObrazovka(modifier: Modifier = Modifier) {
             }
         },
 
-        // Explicitní Intent z lekce 05.
+        // Explicitní Intent pro otevření detailu.
         onOtevritMesto = { mesto ->
             val intent = Intent(
                 context,
@@ -352,7 +360,7 @@ fun MestaObrazovka(modifier: Modifier = Modifier) {
             context.startActivity(intent)
         },
 
-        // BroadcastReceiver z lekce 05.
+        // Broadcast pro oznámení o záznamu.
         onZapsatZaznam = {
             val prvniMesto = mesta.firstOrNull()
 
@@ -373,14 +381,13 @@ fun MestaObrazovka(modifier: Modifier = Modifier) {
 
         modifier = modifier,
 
-        // Oprávnění a zobrazení polohy z lekce 06.
+        // Zcela zachovaná PolohaKarta z lekce 06.
         polohaObsah = {
             PolohaKarta(onPolohaPovolena = {})
         }
     )
 }
 
-// Náhled karty.
 @Preview(name = "Karta – světlá", showBackground = true)
 @Preview(
     name = "Karta – tmavá",
@@ -398,7 +405,6 @@ private fun MestoKartaPreview() {
     }
 }
 
-// Náhled města bez teploty.
 @Preview(name = "Neznámá teplota", showBackground = true)
 @Composable
 private fun MestoBezTeplotyPreview() {
@@ -415,7 +421,6 @@ private fun MestoBezTeplotyPreview() {
     }
 }
 
-// Náhled celé obrazovky.
 @Preview(name = "Obrazovka – světlá", showBackground = true)
 @Preview(
     name = "Obrazovka – tmavá",
@@ -436,7 +441,6 @@ private fun MestaObsahPreview() {
     }
 }
 
-// Náhled prázdného seznamu.
 @Preview(name = "Prázdný seznam", showBackground = true)
 @Composable
 private fun MestaObsahPrazdnaPreview() {

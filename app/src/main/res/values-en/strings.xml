@@ -55,5 +55,10 @@
     <!-- Sharing a city without a known temperature -->
     <string name="sdileny_text_bez_teploty">%1$s: temperature not yet known — recorded in Weather Diary</string>
 
+    <!-- Exercise 7.1 – business card -->
+    <string name="vizitka_obor">Information technology, year 1</string>
+    <string name="vizitka_email_popis">Email: %1$s</string>
+    <string name="vizitka_avatar_popis">Avatar of %1$s</string>
+
 
 </resources>

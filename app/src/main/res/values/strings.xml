@@ -45,5 +45,13 @@
     <!-- Sdílení města bez známé teploty -->
     <string name="sdileny_text_bez_teploty">%1$s: teplotu zatím neznáme — zapsáno v MeteoDeníku</string>
 
+    <!-- Cvičení 7.1 – vizitková karta -->
+    <string name="vizitka_jmeno" translatable="false">Jan Novák</string>
+    <string name="vizitka_obor">Informační technologie, 1. ročník</string>
+    <string name="vizitka_email" translatable="false">jan.novak@example.com</string>
+    <string name="vizitka_email_popis">E-mail: %1$s</string>
+    <string name="vizitka_avatar_popis">Avatar osoby %1$s</string>
+
+
 
 </resources>
